@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %} 
+ Inventory
+{% endblock %}
+{% block content %}
+<!-- TODO: proper css? -->
+<div class='header' style='display:flex;justify-content:space-between'>
+    {% if location_data %}
+    <div class='location-select'>
+      <form action='/inventory' method='get'>
+      <label for='location'> Choose location:</label>
+        <select name='location_id' id='location_id' onchange="this.form.submit()">
+        <option value="" disabled selected> Choose location </option>
+        {% for id, address in location_data %}
+        {% if current_location and current_location == id %}
+        <option selected value='{{ id }}'>{{ address }}</option>
+        {% else %}
+        <option value='{{ id }}'>{{ address }}</option>
+        {% endif %}
+        {% endfor %}
+      </select>
+      <!-- <input type='submit' value='Change location'> -->
+      </form>
+    </div>
+    {% else %}
+  <h2>Error: Inventory data not available.</h2>
+    {% endif %}
+
+  <nav class='navbar'><a href='/'>Home</a></nav>
+
+  <!-- TODO: get rid of this once proper styling -->
+  <span></span>
+</div>
+  <!-- This will only render if there is a valid current_location -->
+{% if inventory_data and column_names %}
+<h1>Current Inventory</h1>
+        <table>
+            <thead>
+                <tr>
+                    {% for column in column_names %}
+                        <th>{{ column }}</th>
+                    {% endfor %}
+                    <th> Update Quantity </th>
+                    <th> Update Backorder Status </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in inventory_data %}
+                    <tr>
+                        {% for item in (row)[1:] %}
+                            <td>{{ item }}</td>
+                        {% endfor %}
+                        <td><form action='/inventory' method='post'>
+                            <input type='hidden' name='location_id' value='{{ current_location }}'>
+                            <input type='hidden' name='product_id' value='{{ row[0] }}'>
+                            <input required type='number' name='new_quantity'>
+                            <input type='submit' value='Update'>
+                          </form>
+                        </td>
+
+                        <td><form action='/inventory' method='post'>
+                            <input type='hidden' name='location_id' value='{{ current_location }}'>
+                            <input type='hidden' name='product_id' value='{{ row[0] }}'>
+                            <input type='hidden' name = 'off_backorder' value='off'>
+                            {% if row[4] and row[4] == "TRUE" %}
+                              <input type='checkbox' name='on_backorder' checked>
+                            {% else %}
+                              <input type='checkbox' name='on_backorder'>
+                            {% endif %}
+                            <input type='submit' value='Update'>
+                          </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endif %}
+
+<!-- TODO: Add styling And proper flexbox/grid layout -->
+{% if available_products and available_columns %}
+<br><br>
+<div class="available">
+<h1>Add Products</h1>
+  <table>
+    <thead>
+        <tr>
+            {% for column in available_columns%}
+                <th>{{ column }}</th>
+            {% endfor %}
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for row in available_products %} 
+      <tr>
+          {% for item in (row)[1:] %}
+              <td>{{ item }}</td>
+          {% endfor %}
+          <td>
+            <td><form action='/inventory' method='post'>
+                <input type='hidden' name='location_id' value='{{ current_location }}'>
+                <input type='hidden' name='product_id' value='{{ row[0] }}'>
+                <input required type='number' name='add_quantity'>
+                <input type='submit' value='Add'>
+              </form>
+            </td>
+          </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+{% endblock %}

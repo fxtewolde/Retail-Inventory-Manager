@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %} Optimum Members {% endblock %}
+
+{% block content %}
+
+<div class='header' style='display:flex;justify-content:space-between'>
+  <span></span>
+  <nav class='navbar'>
+    <a href='/'>Home</a>
+  </nav>
+  <span></span>
+</div>
+  <!-- Display form -->
+  {% if optimum_member and columns %}
+  <h1>Optimum Member</h1>
+    <table>
+      <thead>
+        <tr >
+          {% for column in columns %}
+            <th>{{ column }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+          {% for member in optimum_member %}
+          <tr>
+              {% for item in member %}
+                <td>{{ item }}</td>
+              {% endfor %}
+          </tr>
+          {% endfor %}
+      </tbody>
+    </table> 
+<div class='footer' style='display:flex;justify-content:space-between'>
+  <nav class='navbar'>
+    <a href='/optimum'>Search Another</a>
+  </nav>
+</div>
+  <!-- Select form -->
+  {% elif optimum_members and columns %}
+  <form action='/optimum' name='optimum_select' method='post'>
+    <input type='hidden' name='optimum_id'>
+    <table>
+      <thead>
+        <tr>
+          {% for column in columns %}
+            <th>{{ column }} </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for member in optimum_members %}
+        <tr name="{{ member[0] }}" onclick="send_id(this.getAttribute('name'))">
+          {% for item in member %}
+          <td>{{ item }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table> 
+  </form> 
+  <script type="text/javascript">
+    function send_id(id)
+    {
+      let elem = document.getElementsByName('optimum_select')[0];
+      alert("elem: " + elem);
+      elem.optimum_id.value = id;
+      elem.submit()
+    }
+  </script>
+  <div class='footer' style='display:flex;justify-content:space-between'>
+    <nav class='navbar'>
+      <a href='/optimum'>Search Another</a>
+    </nav>
+  </div>
+  <!-- Search form -->
+  {% else %}
+  <h1>Search Optimum Members</h1>
+  <form action='/optimum' method='post'>
+    <input type='number' name='optimum_id' placeholder='Optimum ID'>
+    <input type='text' name='first_name' placeholder='First Name'>
+    <input type='text' name='last_name' placeholder='Last Name'>
+    <input type='text' name='telephone' placeholder='Telephone'>
+    <input type='text' name='email' placeholder='Email'>
+    <input type='submit' value='search'>
+  </form>
+
+  {% endif %}
+{% endblock %}

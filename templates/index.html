@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+
+{% block content %}
+<div class="menu-section">
+    <h1>Setup Menu</h1>
+    <div class="menu-buttons">
+        <a href="/c"><button class="menu-button">Create Tables</button></a>
+        <a href="/p"><button class="menu-button">Populate Tables</button></a>
+        <a href="/d"><button class="menu-button">Drop Tables</button></a>
+        <a href="/q"><button class="menu-button">Query Tables</button></a>
+        <a href="/exit"><button class="menu-button">Exit</button></a>
+    </div>
+</div>
+
+<div class="menu-section">
+    <h1>App Menu</h1>
+    <div class="menu-buttons">
+        <a href="/inventory"><button class="menu-button">Manage Inventory</button></a>
+        <a href="/optimum"><button class="menu-button">Search Optimum Members</button></a>
+    </div>
+</div>
+{% endblock %}
