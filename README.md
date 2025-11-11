@@ -13,4 +13,4 @@ A Flask web application for managing retail inventory, designed with a BCNF-norm
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/retail-inventory-manager.git
+git clone https://github.com/fxtewolde/retail-inventory-manager.git
